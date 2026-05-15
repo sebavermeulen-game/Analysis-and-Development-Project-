@@ -1,0 +1,126 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+a {
+    text-decoration: none;
+    color: #ffffff;
+
+}
+header {
+    background-color: #ffffff;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    color: #333;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(130deg, #021a61, #184987, #175283, #1d73a5, #228399, #31b0b0);
+    background-size: 400% 400%;
+    animation: gradientAnimation 12s ease infinite;
+    min-height: 100vh;
+}
+@keyframes gradientAnimation {
+    0% { background-position: 0 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0 50%; }
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin: 1rem 0;
+    opacity: 0;
+    transform: translateY(-2rem);
+    animation: fadeIn 1.5s ease forwards;
+
+}
+
+
+h2 {
+    font-size: 2rem;
+    color: #fff;
+    margin: 1rem 0;
+    opacity: 0;
+    transform: translateY(-2rem);
+    animation: fadeIn 1.5s ease forwards;
+}
+
+h6 {
+    font-size: 2.5rem;
+    color: black;
+}
+.button-group,.continue-button, input,label, p, textarea, .submit-btn{
+
+    margin: 1rem 0;
+    opacity: 0;
+    transform: translateY(-2rem);
+    animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dots-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.dot {
+    height: 1.25rem;
+    width: 1.25rem;
+    margin-right: 0.625rem;
+    border-radius: 0.625rem;
+    background-color: #b3d4fc;
+    animation: pulse 4s infinite ease-in-out;
+}
+
+.dot:last-child {
+    margin-right: 0;
+}
+
+.dot:nth-child(1) {
+    animation-delay: -0.3s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: -0.1s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.1s;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+        background-color: #b3d4fc;
+        box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+    }
+
+    50% {
+        transform: scale(1.2);
+        background-color: #6793fb;
+        box-shadow: 0 0 0 10px rgba(178, 212, 252, 0);
+    }
+
+    100% {
+        transform: scale(0.8);
+        background-color: #b3d4fc;
+        box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+    }
+}

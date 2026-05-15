@@ -1,0 +1,32 @@
+{
+  "name": "2024-adria-client",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "validate-html": "java -jar node_modules/vnu-jar/build/dist/vnu.jar --Werror --filterpattern \".*(v-|@).*\" --filterfile .vnuignore --skip-non-html ./src",
+    "sonar-ci": "node_modules/sonar-scanner/bin/sonar-scanner",
+    "sonar-macos": "node_modules/sonar-scanner/bin/sonar-scanner -Dsonar.host.url=https://sonarqube.ti.howest.be",
+    "sonar-windows": ".\\node_modules\\sonar-scanner\\bin\\sonar-scanner -Dsonar.host.url=https://sonarqube.ti.howest.be",
+    "validate-on-ci": "npm run validate-html && npm run sonar-ci",
+    "validate-on-macos": "npm run validate-html && npm run sonar-macos",
+    "validate-on-windows": "npm run validate-html && npm run sonar-windows"
+  },
+  "dependencies": {
+    "sonar-scanner": "^3.1.0",
+    "vite-plugin-pwa": "^0.21.0",
+    "vnu-jar": "^20.2.28",
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "cross-env": "^7.0.3",
+    "rimraf": "^5.0.5",
+    "vite": "^5.3.1"
+  }
+}

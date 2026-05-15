@@ -1,0 +1,32 @@
+GET http://localhost:8080/api/GetAllSubscriptions
+content-type: application/json
+
+###
+
+
+GET http://localhost:8080/api/GetAllLocations
+
+###
+
+POST http://localhost:8080/api/buySubscription
+Content-Type: application/json
+
+{
+"userId": "30c36b27-ef64-4150-b732-0ce8844d9ee4",
+  "subscriptionId":9
+}
+
+###
+POST http://localhost:8080/api/order-options
+Content-Type: application/json
+
+{
+  "userId": "a4d0d496-b9dd-40ce-a47d-e1dd6cf2db69",
+  "intensity": 10,
+  "duration": 10,
+  "range": 10,
+  "location": {
+    "lat": -1.0,
+    "lng": 42.0
+  }
+}
