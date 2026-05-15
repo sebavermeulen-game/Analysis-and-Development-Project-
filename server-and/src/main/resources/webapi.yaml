@@ -1,0 +1,395 @@
+openapi: 3.0.1
+info:
+  title: LightingFast API
+  description: The lighting fast let's users subscribe to our platform and order light. It provides endpoints for health checks, notifications, subscriptions, and orders.
+  version: 1.0.0
+  x-authors:
+    - Student 1
+    - Student 2
+    - Student 3
+
+servers:
+  - url: http://localhost:8080/
+    description: Local development
+  # Note: Production URL should only be used for testing purposes from a local machine. Uncomment for production testing.
+  # - url: https://project-2.ti.howest.be/2024-2025/group-22/
+  #   description: Production
+
+paths:
+  /api/health:
+    get:
+      summary: Health Check
+      description: Endpoint to check the health status of the application.
+      operationId: healthCheck
+      tags:
+        - Health
+      responses:
+        "200":
+          description: Application is healthy
+        "500":
+          description: Application is unhealthy
+
+  /api/subscribe:
+    post:
+      summary: Subscribe to Notifications
+      description: Allows a user to subscribe to notifications by providing endpoint and encryption keys.
+      operationId: subscribe
+      tags:
+        - Notifications
+      requestBody:
+        description: Required data to subscribe to notifications
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                endpoint:
+                  type: string
+                  description: URL to receive notifications
+                keys:
+                  type: object
+                  properties:
+                    p256dh:
+                      type: string
+                      description: Public key for encryption
+                    auth:
+                      type: string
+                      description: Authentication secret
+              required:
+                - endpoint
+                - keys
+      responses:
+        "201":
+          description: Subscription successful
+        "400":
+          description: Invalid input or missing required fields
+        "500":
+          description: Internal server error
+
+  /api/order-options:
+    post:
+      summary: Set Order Options
+      description: Set options for an order such as duration, range, and intensity.
+      operationId: CreateOrder
+      tags:
+        - Order
+      requestBody:
+        description: Order options details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                duration:
+                  type: integer
+                  description: Duration of the order in minutes
+                range:
+                  type: integer
+                  description: Range of the order
+                intensity:
+                  type: integer
+                  description: Intensity of the order
+                userId:
+                  type: string
+                  description: Identifier for the user
+                location:
+                    type: object
+                    description: Location of the order
+                    properties:
+                      lat:
+                        type: number
+                        format: double
+                        description: Latitude of the order location
+                      lng:
+                        type: number
+                        format: double
+                        description: Longitude of the order location
+                    required:
+                      - lat
+                      - lng
+              required:
+                - duration
+                - range
+                - intensity
+                - userId
+                - location
+      responses:
+        "201":
+          description: Order options set successfully
+        "400":
+          description: Invalid input or missing required fields
+        "500":
+          description: Internal server error
+
+  /api/GetAllSubscriptions:
+    get:
+      operationId: GetAllSubscriptions
+      summary: Retrieve All Subscriptions
+      description: Returns a list of all subscriptions with optional filters.
+      tags:
+        - Subscriptions
+      parameters:
+        - name: subscriptionType
+          in: query
+          description: Filter by subscription type
+          required: false
+          schema:
+            type: string
+        - name: subscriptionPlan
+          in: query
+          description: Filter by subscription plan
+          required: false
+          schema:
+            type: string
+        - name: hours
+          in: query
+          description: Filter by number of hours
+          required: false
+          schema:
+            type: integer
+        - name: range
+          in: query
+          description: Filter by range
+          required: false
+          schema:
+            type: integer
+        - name: intensity
+          in: query
+          description: Filter by intensity level
+          required: false
+          schema:
+            type: string
+        - name: subscriptionSupport
+          in: query
+          description: Filter by support type
+          required: false
+          schema:
+            type: string
+        - name: price
+          in: query
+          description: Filter by price
+          required: false
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Successful response with subscription data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        "400":
+          description: Invalid query parameters
+        "500":
+          description: Internal server error
+
+  /api/GetAllLocations:
+    get:
+      operationId: GetAllLocations
+      summary: Retrieve All Locations
+      description: Returns a list of all locations with optional filters.
+      tags:
+        - Locations
+      responses:
+        "200":
+          description: Successful response with location data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Locations'
+        "400":
+          description: Invalid query parameters
+        "500":
+          description: Internal server error
+
+
+  /api/CreateUser:
+    post:
+      summary: Create a New User
+      description: Endpoint to create a new user with a unique identifier.
+      operationId: CreateUser
+      tags:
+        - User
+      requestBody:
+        description: Data required to create a new user
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+      responses:
+        "201":
+          description: User created successfully
+          headers:
+            Location:
+              description: URL of the newly created user
+              schema:
+                type: string
+                format: uri
+        "400":
+          description: Invalid input or missing required fields
+        "500":
+          description: Internal server error
+
+  /api/buySubscription:
+    post:
+      summary: Buy a Subscription
+      description: Endpoint to buy a subscription with a unique identifier.
+      operationId: CreateSubscription
+      tags:
+        - Subscription
+      requestBody:
+        description: Data required to buy a subscription
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: Identifier for the user
+                subscriptionId:
+                  type: integer
+                  description: Identifier for the subscription
+              required:
+                - userId
+                - subscriptionId
+      responses:
+        "201":
+          description: Subscription bought successfully
+          headers:
+            Location:
+              description: URL of the newly bought subscription
+              schema:
+                type: string
+                format: uri
+        "400":
+          description: Invalid input or missing required fields
+        "500":
+          description: Internal server error
+
+components:
+  schemas:
+    Subscription:
+      type: object
+      properties:
+        subscriptionId:
+          type: integer
+          format: int64
+          description: Unique identifier for the subscription
+        subscriptionType:
+          type: string
+          description: Type of the subscription plan
+        subscriptionPlan:
+          type: string
+          description: Name of the subscription plan
+        hours:
+          type: integer
+          description: Number of hours included in the subscription
+        range:
+          type: integer
+          description: Range of the subscription
+        intensity:
+          type: string
+          description: Intensity level of the subscription
+        extraInformation:
+          type: string
+          description: Additional information about the subscription
+        requestInformation:
+          type: string
+          description: Information about the request
+        subscriptionSupport:
+          type: string
+          description: Type of support included in the subscription
+        price:
+          type: number
+          format: float
+          description: Price of the subscription plan
+      required:
+        - subscriptionId
+        - subscriptionType
+        - subscriptionPlan
+        - hours
+        - range
+        - intensity
+        - subscriptionSupport
+        - price
+
+    CreateUserRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Identifier for the user
+      required:
+        - userId
+
+    CreateOrderRequest:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Unique identifier for the order
+        itemIds:
+          type: array
+          items:
+            type: string
+          description: List of item IDs included in the order
+        totalPrice:
+          type: number
+          format: float
+          description: Total price of the order
+        userId:
+          type: string
+          description: Unique identifier for the customer placing the order
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              format: double
+              description: Latitude of the order location
+            longitude:
+              type: number
+              format: double
+              description: Longitude of the order location
+          required:
+            - latitude
+            - longitude
+      required:
+        - range
+        - intensity
+        - userId
+        - location
+        - duration
+
+    CreateSubscriptionRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Identifier for the user
+        subscriptionId:
+          type: integer
+          description: Identifier for the subscription
+      required:
+        - userId
+        - subscriptionId
+
+    Locations:
+      type: array
+      items:
+        type: object
+        properties:
+          latitude:
+            type: string
+            description: Latitude of the location
+          longitude:
+            type: string
+            description: Longitude of the location
+          duration:
+            type: number
+            description: Duration

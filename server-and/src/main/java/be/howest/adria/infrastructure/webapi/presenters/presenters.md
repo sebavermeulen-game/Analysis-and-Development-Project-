@@ -1,0 +1,1 @@
+Presenters connect the output of the use cases to the http response handler.

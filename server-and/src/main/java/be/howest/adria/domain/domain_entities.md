@@ -1,0 +1,1 @@
+Create your domain entities here.

@@ -1,0 +1,1 @@
+Create a mapper for each entity you want to map to query on.
